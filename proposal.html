@@ -443,7 +443,7 @@ rather than a random sample.</p>
 <h3>4.4) Data Sample</h3>
 <p>We have obtained the data in the form of csv files. Below are the
 first 5 rows of our data sets:</p>
-<pre class="r"><code>walkability &lt;- read_csv(&quot;../data/EPA_SmartLocationDatabase_V3_Jan_2021_Final.csv&quot;)</code></pre>
+<pre class="r"><code>walkability &lt;- read_csv(&quot;./data/EPA_SmartLocationDatabase_V3_Jan_2021_Final.csv&quot;)</code></pre>
 <pre><code>## Rows: 220740 Columns: 117
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -452,12 +452,12 @@ first 5 rows of our data sets:</p>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>colleges &lt;- read_csv(&quot;../data/Universities_and_Colleges.csv&quot;)</code></pre>
-<pre><code>## Rows: 38 Columns: 15
+<pre class="r"><code>colleges &lt;- read_csv(&quot;./data/colleges.csv&quot;) %&gt;% rename(city = CITY)</code></pre>
+<pre><code>## Rows: 6072 Columns: 8
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr (9): NAME, ADDRESS, WEB_URL, GIS_ID, CREATOR, CREATED, EDITOR, EDITED, G...
-## dbl (6): X, Y, XCOORD, YCOORD, MAR_ID, OBJECTID
+## chr (4): INSTNM, CITY, STABBR, ZIP
+## dbl (4): CARNEGIESIZE, INSTSIZE, LONGITUD, LATITUDE
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -478,16 +478,14 @@ first 5 rows of our data sets:</p>
 ## #   R_LowWageWk &lt;dbl&gt;, R_MedWageWk &lt;dbl&gt;, R_HiWageWk &lt;dbl&gt;, R_PCTLOWWAGE &lt;dbl&gt;,
 ## #   TotEmp &lt;dbl&gt;, E5_Ret &lt;dbl&gt;, E5_Off &lt;dbl&gt;, E5_Ind &lt;dbl&gt;, E5_Svc &lt;dbl&gt;, …</code></pre>
 <pre class="r"><code>head(colleges, 5)</code></pre>
-<pre><code>## # A tibble: 5 × 15
-##           X        Y NAME    ADDRESS WEB_URL XCOORD YCOORD MAR_ID GIS_ID CREATOR
-##       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-## 1 -8575438. 4718431. Our La… 7164 A… https:… 3.97e5 1.45e5 259410 Unive… JLAY   
-## 2 -8575388. 4708053. Straye… 1133 1… https:… 3.97e5 1.37e5 240246 Unive… JLAY   
-## 3 -8571569. 4711765. Theolo… 401 MI… https:… 4.00e5 1.40e5 288071 Unive… JLAY   
-## 4 -8581702. 4709915. George… 2100 F… https:… 3.92e5 1.39e5 224574 Unive… JLAY   
-## 5 -8575760. 4708292. Univer… 1608 R… https:… 3.97e5 1.38e5 279253 Unive… JLAY   
-## # ℹ 5 more variables: CREATED &lt;chr&gt;, EDITOR &lt;chr&gt;, EDITED &lt;chr&gt;,
-## #   GLOBALID &lt;chr&gt;, OBJECTID &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 5 × 8
+##   INSTNM              city  STABBR ZIP   CARNEGIESIZE INSTSIZE LONGITUD LATITUDE
+##   &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Alabama A &amp; M Univ… Norm… AL     35762            3        3    -86.6     34.8
+## 2 University of Alab… Birm… AL     3529…            4        5    -86.8     33.5
+## 3 Amridge University  Mont… AL     3611…            2        1    -86.2     32.4
+## 4 University of Alab… Hunt… AL     35899            3        3    -86.6     34.7
+## 5 Alabama State Univ… Mont… AL     3610…            3        2    -86.3     32.4</code></pre>
 <hr />
 </div>
 </div>
