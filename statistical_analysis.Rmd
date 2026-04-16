@@ -1,0 +1,46 @@
+---
+title: "Statistical Analysis"
+author: "Mark Ariagno"
+date: "2026-04-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This is the start I was able to get. Basically all it does is categorize and organize the data. The method I used definitely isn't perfect, so if anyone can think of a better way, then feel free to change.
+
+```{r}
+
+# First we import the data
+walkability <- read_csv("./data/EPA_SmartLocationDatabase_V3_Jan_2021_Final.csv")
+colleges <- read_csv("./data/colleges.csv") %>% rename(city = CITY)
+
+head(walkability, 5)
+head(colleges, 5)
+
+# Clean data by keeping only city and walkability columns
+# To get cities, we split the CSA_Name column to only include characters up to the first '-' which is the name of the city.
+walkability <- walkability %>%
+  select(city = CSA_Name, walkability = NatWalkInd) %>% mutate(city = str_split(city, "-", simplify = TRUE)[,1]) 
+
+
+# Filter colleges to only include "larger" colleges. To do this, we use the Carnegie Size metric. TODO: I think this classifies colleges based on size and a couple other metrics, and it seems like it is a pretty good way to differentiate small universities and bigger universities that we can call "college towns".
+colleges <- colleges %>% filter(CARNEGIESIZE >= 4) %>%
+  select(INSTNM, city)
+
+# We group walkability by city and take the average for each city
+city_walkability <- walkability %>% group_by(city) %>% summarise(walkability = mean(walkability))
+
+city_walkability
+
+# We add a boolean to see if a city has a large college.
+joined_data <- city_walkability %>%
+  mutate(has_college = city %in% colleges$city)
+
+joined_data
+
+```
+
