@@ -1,0 +1,159 @@
+---
+title: "Final Group Project"
+author: "Mark Ariagno, Hemanth Indukuri, Stanislav Stajila, Aditya Suresh"
+date: "2026-04-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+**Group members:**  
+Mark Ariagno, Hemanth Indukuri, Stanislav Stajila, Aditya Suresh  
+
+---
+
+## 1) Communication Plan:
+
+**Communication:**  
+We will primarily communicate over iMessage and in person during our scheduled discussion time.  
+
+**Meeting Times:**  
+Outside of our scheduled discussion time, we will meet on Wednesdays after class. On Monday the 13th, we will formally discuss our plan for who will work on what. We will work individually on the presentation in the week leading up to Wednesday the 15th Prior to the Draft Presentation deadline, we will meet on Wednesday after class to make sure that we have the bulk of our work done. This will be our time to really get settled for the project. The presentation should be at a point where only minor tweaks are necessary after that day. We will meet briefly on Monday after class to briefly confirm our plan for presenting.  
+
+**Platforms of Communication:**  
+iMessage and Outlook  
+
+We have a group chat that we will use to provide updates about what work we have done, as well as for any other questions or discussion that may arise.  
+
+---
+
+## 2) Research Question(s)
+
+Is the mean Walkability Index significantly higher in college towns than in non-college towns in the United States?  
+
+---
+
+## 3) Data Source
+
+https://catalog.data.gov/dataset/walkability-index8  
+https://www.kaggle.com/datasets/detectived64/us-national-colleges-locations-and-size-category  
+
+---
+
+## 4) Data Description
+
+### 4.1) Data Collection - Who collected the data and how?
+
+Walkability Dataset:  
+The owner of the data is the U.S. Environmental Protection Agency, whereas the data was procured from the 2019 U.S. Census. The EPA developed this walkability index using data primarily from the 2019 Census at the Census block group level. The EPA did not collect new survey data directly. Instead, it combined existing Census-based measures of the built environment, such as residential density, street intersection density, land-use diversity, and proximity to destinations, into a composite walkability index. These variables are also based on administrative and geographic records collected by the Census Bureau and other federal sources.  
+
+College Town Dataset  
+The data was collected by the U.S. Department of Education, specifically the Integrated Postsecondary Education Data System. Data was compiled by an independent Kaggle user, “Justin Lee,” and was most recently updated 5 months ago.  
+
+---
+
+### 4.2) Key Variables → what do they measure and how are they related to our key questions
+
+Outcome Variable  
+Walkability Index  
+Continuous, numerical score  
+Higher values indicate more walkable neighborhoods  
+Measured at the Census block group level  
+
+Group By Variable  
+College town/city location - categorical variable with two levels: college town, non-college town. Defined based on whether the Census block group lies within a county containing a major college or university  
+
+---
+
+### 4.3) Larger Populations (IF DATA IS A SAMPLE) - N/A
+
+This dataset represents a near-census of U.S. Census block groups rather than a random sample.  
+
+---
+
+### 4.4) Data Sample
+
+We have obtained the data in the form of csv files. Below are the first 5 rows of our data sets:
+
+```{r}
+
+# First we import the data
+walkability <- read_csv("./data/EPA_SmartLocationDatabase_V3_Jan_2021_Final.csv")
+colleges <- read_csv("./data/colleges.csv") %>% rename(city = CITY)
+
+
+# Clean data by keeping only city and walkability columns
+# To get cities, we split the CSA_Name column to only include characters up to the first '-' which is the name of the city.
+walkability <- walkability %>%
+  select(city = CSA_Name, walkability = NatWalkInd) %>% mutate(city = str_split(city, "-", simplify = TRUE)[,1]) 
+
+
+# Filter colleges to only include "larger" colleges. To do this, we use the Carnegie Size metric. TODO: I think this classifies colleges based on size and a couple other metrics, and it seems like it is a pretty good way to differentiate small universities and bigger universities that we can call "college towns".
+colleges <- colleges %>% filter(CARNEGIESIZE >= 4) %>%
+  select(INSTNM, city)
+
+# We group walkability by city and take the average for each city
+city_walkability <- walkability %>% group_by(city) %>% summarise(walkability = mean(walkability))
+
+city_walkability
+
+# We add a boolean to see if a city has a large college.
+joined_data <- city_walkability %>%
+  mutate(has_college = city %in% colleges$city)
+
+joined_data
+
+```
+
+---
+
+## 5) Graph Description
+
+We plan to create side-by-side boxplots to compare the distribution of the Walkability Index values between college towns and non-college towns  
+
+X-Axis: College Town Status (college town vs. non-college town)  
+Y-Axis: Walkability Index  
+
+Seeing these distributions side by side will make the visual differences in the distribution of the data apparent.  
+
+---
+
+## 6) Inference Method
+
+We have two routes we go can for this:  
+
+### Type of inference method: simple linear regression with a binary explanatory variable.
+
+Which variables are cause and effect of this inference method?  
+
+Cause Variable: College Town Status  
+Effect Variable: Walkability Index  
+
+Steps:  
+Represent college town status as a binary variable (represent college town with 1 and non-college town with 0).  
+Fit a simple linear regression model.  
+Estimate the regression coefficient β1​.  
+Compute the test statistic and corresponding p-value for β1​.  
+Compare the p-value to the significance level α=0.05.  
+
+---
+
+### Type of inference method: A 2 sample t test on the difference in means.
+
+Which variables are cause and effect of this inference method?  
+
+Cause Variable: College Town Status  
+Effect Variable: Walkability Index  
+
+Steps:  
+Encode college town status as a binary variable  
+Conduct a 2-sample t test on the difference in the mean walkability in college towns v.s. non-college towns.  
+Compare the p-value to the significance level α = .05 and make a correct interpretation  
+
+Interpretation:  
+Reject H0: If p < 0.05, conclude that college towns have a statistically significantly higher mean Walkability Index than non-college towns.  
+Fail to Reject H0: If p ≥ 0.05, conclude that there is insufficient evidence to claim a difference in mean Walkability Index between the two groups.  
