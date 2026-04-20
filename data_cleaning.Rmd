@@ -29,7 +29,7 @@ walkability <- walkability %>%
 
 
 # Filter colleges to only include "larger" colleges. To do this, we use the Carnegie Size metric. TODO: I think this classifies colleges based on size and a couple other metrics, and it seems like it is a pretty good way to differentiate small universities and bigger universities that we can call "college towns".
-colleges <- colleges %>% filter(CARNEGIESIZE >= 4) %>%
+colleges <- colleges %>% filter(INSTSIZE >= 5) %>%
   select(INSTNM, city)
 
 # We group walkability by city and take the average for each city
@@ -40,6 +40,9 @@ city_walkability
 # We add a boolean to see if a city has a large college.
 joined_data <- city_walkability %>%
   mutate(has_college = city %in% colleges$city)
+
+joined_data %>% filter(has_college == T) %>% count()
+joined_data %>% filter(has_college == F) %>% count()
 
 
 write.csv(joined_data, "./Data/clean.csv", row.names = FALSE)
