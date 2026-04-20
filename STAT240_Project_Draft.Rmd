@@ -1,0 +1,140 @@
+---
+title: "STAT240 Project Draft"
+author: "Mark A, Stanislav S, Hemanth I, Aditya S"
+date: "2026-04-20"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+clean_data = read.csv("./data/clean.csv")
+```
+# Group Members 
+* Mark A 
+* Stanislav S
+* Hemanth I
+* Aditya S
+
+## Introduction
+
+The EPA’s Walkability Index is an important indicator of the walkability of a city district in the United States. The Walkability Index was taken from data collected through the 2019 U.S. Census and is often used to conduct important research and problem-solving efforts towards urban planning and city structure.
+
+With this in mind, and from our perspective as college students, we will be showing the relationship between the Walkability Index of varying cities and whether or not they coincide with what we determine as “college towns.” The main research question we will be answering is: “Is the mean Walkability Index significantly higher in college towns than in non-college towns in the United States?” 
+
+## Background
+
+### Data Sources
+
+Raw Data: The raw data was originally procured from the 2019 U.S. Census, which is conducted by the U.S. Census Bureau every 10 years as mandated by the Constitution of the United States and the Federal Government. From this, the EPA developed its Walkability Index using data at the Census block-group level (city blocks).
+How was the data collected?: The EPA did not collect new survey data directly. Instead, it combined existing Census-based measures of the built environment, such as residential density, street intersection density, land-use diversity, and proximity to destinations, into a composite walkability index. These variables are also based on administrative and geographic records collected by the Census Bureau and other federal sources.
+
+### Variables
+
+- **City:** Represents 166 cities across the U.S. states that were included in the dataset.
+- **Walkability Index:** A numerical measure of how friendly a built environment is to pedestrians in the area. It is based on factors such as residential density, street intersection density, land-use diversity, and proximity to destinations. A higher walkability index indicates more walkable areas, while a lower index indicates the opposite.
+- **Has_College:** A boolean value classifying a city as a “college town.” We used the following metrics to make this classification: 
+  + Only colleges that are rated at a 5 on a scale of 1-5 for institution size can be considered a college in a college town. 
+  + A college town is a city that has at least 1 college that meets the size rating.
+
+### Data Structure
+#### Walkability Index Dataset
+  - **Rows:** Each row represents one Census block group in the United States
+  - **Columns:** For the analysis, the main columns used were CSA Name and NatWalkIndWalkability. The CSA Name contains the city, state, and county although we mainly just used the city for our analysis. The NatWalkIndWalkability variable represents the walkability index score for that block group
+  - **Sample Size:** The sample size was the entire dataset, so it was all block groups that were included in the Walkability Index Dataset
+
+#### College Town Dataset:
+- **Rows:** Each row represents one college or university in the United States. Since multiple institutions can be located in the same city, some cities appear more than once
+- **Columns:** The dataset includes information about each college or university such as institution name, city, state, zip code, carnegie size classification, institution size classification, and the institution’s longitude and latitude coordinates
+- **Sample Size:** Our sample size is 6,072 institutions that were in the dataset
+
+#### Data Visualization:
+
+```{r}
+ggplot(clean_data, aes(has_college, walkability, fill = has_college))+
+  geom_boxplot() +
+  labs(
+    title = "Walkability Index in Non-College Towns vs. College Towns",
+    x = "Is a College Town?",
+    y = "Walkability Index"
+    )
+```
+This boxplot represents the distribution of walkability indexes in college (green box) and non-college towns (red box). From the plot, it can be seen that the average walkability score is higher in the college towns than in non-college towns. 
+
+### Statistical Analysis
+
+In this study, we investigate the difference in walkability indices between college and non-college towns. We will construct a one-sided hypothesis because the box plots looking at mean walkability in cities show a fairly significant difference between college and non-college towns.
+
+#### Parameter of Interest
+
+The parameters of interest are the true mean walkability indexes:
+
+\(\mu_x\): is the true average walkability index of non college towns.
+\(\mu_y\): is the true average walkability index of college towns.
+
+#### Type of Inference
+
+We employ a two-sample \(t\)-test for independent samples with unequal variances (Welch’s \(t\)-test) to test for a significant difference between the two population means.
+
+#### Assumptions
+
+\[X = \text{Walkability Index for Non-College Towns} \sim D_x(\mu_x, \sigma_x)\]
+
+\[Y = \text{Walkability Index for College Towns} \sim D_Y(\mu_y, \sigma_y)\]
+
+Independence: It is assumed that the two groups (Non-College and College Towns) are independent of each other. This assumption is satisfied as the data were collected from distinct groups.
+
+#### Hypotheses Testing
+
+The hypotheses for this analysis are:
+
+$$H0: \mu_x = \mu_y \text{ versus } H\alpha: \mu_x < \mu_y$$
+```{r}
+t.test(walkability ~ has_college, data=clean_data, alternative = "less")
+```
+#### Results 
+
+- Test Statistic (t): -6.8466
+- P-value: 3.092e-10
+- Confidence Interval: [7.668828, 9.638017]
+
+```{r}
+t = -6.8466
+p_val = 3.092e-10
+CI = c(7.668828, 9.638017)
+```
+
+
+#### Interpretation: Compare p-value with \(\alpha = 0.05\)
+
+Since our p-value of `r p_val` is < alpha = .05 we reject the null hypothesis in favor of the alternative hypothesis. We have enough evidence that the mean walkability index in college towns is significantly higher than the walkability index in non-college towns. 
+
+#### Confidence Interval
+
+The 95% confidence interval for the difference in mean walkability index between college towns and non-college towns is [`r CI`] in the U.S.. Since this confidence interval does not include 0, we can conclude that the mean walkability index in college towns is significantly higher than the walkability index in non-college towns. 
+
+### Discussion
+
+- **Further Interpretation:**
+
+The results of our analysis show that the p-value `r p_val` is far less than the significance level of 0.05. This provides strong evidence to reject the null hypothesis and conclude that the walkability index in college towns is much higher than the walkability index in non-college towns.
+
+For non-statistical readers, the p-value represents the probability of observing such a difference (or a more extreme one) if the average walkability index for the two groups were actually the same. A very small p-value, as seen here, indicates that it is highly unlikely for the walkability index between College and Non-College towns to be equal. Furthermore, the 95% confidence interval for the difference in average walkability score is [`r CI``], which not only does not include 0 but is entirely less than 0. This is consistent with the one-sided hypothesis test and reinforces the conclusion that the walkability index in College Towns is significantly higher compared to the Non-College towns.
+
+The combination of the small p-value and the confidence interval entirely less than 0 provides robust evidence of the disparity in the walkability index between these two town groups.
+
+- **Shortcomings of the analysis**
+
+  + *College Town Categorization:* Our methodology for categorizing college towns is not 100% ideal. Our classification for college towns uses the institution size as the main metric, which doesn’t take into account other factors of college towns like the social scene, demographics, and the reliance of the local economy on the college.
+
+  + *Large Joins:* We joined our data for cities and colleges on the city name, which brings about the issue of a large city being classified as a college town even if only a small portion of the city is a college.
+
+    + Having a column “county” in our walkability and college data sets would have been useful as we could have joined on that rather than city. This would’ve provided a better overall representation of a college town.
+
+- **Additional Questions and Recommendations for Future Research**
+
+  + *Alternative Definition of College Towns:* For future research we can change the way we define college towns. For example, instead of mainly using institution size, future studies could classify college towns by student population to city population ratios, number of colleges in a city, or overall influence of a college in a local area.
+  
+  + *Expanding the Dataset:* Another way to make this analysis more effective for future research could be to add additional variables such as access to public transportation, population density, housing development, downtown business activity, and more could help explain whether if it’s the college towns that are truly more walkable or if it’s other city characteristics that are playing a bigger role.
+  + *Comparing by Institution Types:* Future studies could also compare walkability patterns across different kinds of colleges, such as large public univerisities, small private colleges, and community colleges, to see whether the size or type or institution affects the results.
+
