@@ -1,5 +1,5 @@
 ---
-title: "Statistical Analysis"
+title: "Data Cleaning"
 author: "Mark Ariagno"
 date: "2026-04-16"
 output: html_document
@@ -41,7 +41,8 @@ city_walkability
 joined_data <- city_walkability %>%
   mutate(has_college = city %in% colleges$city)
 
-joined_data
+
+write.csv(joined_data, "./Data/clean.csv", row.names = FALSE)
 
 ```
 
