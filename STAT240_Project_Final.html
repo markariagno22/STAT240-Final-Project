@@ -518,11 +518,11 @@ H\alpha: \mu_x &lt; \mu_y\]</span></p>
 <ul>
 <li>Test Statistic (t): -6.8466</li>
 <li>P-value: 3.092e-10</li>
-<li>Confidence Interval: [7.668828, 9.638017]</li>
+<li>Confidence Interval: [-Inf, -1.491684]</li>
 </ul>
 <pre class="r"><code>t = -6.8466
 p_val = 3.092e-10
-CI = c(7.668828, 9.638017)</code></pre>
+ci = c(-Inf, -1.491684)</code></pre>
 </div>
 <div id="interpretation-compare-p-value-with-alpha-0.05" class="section level4">
 <h4>Interpretation: Compare p-value with <span class="math inline">\(\alpha = 0.05\)</span></h4>
@@ -535,11 +535,10 @@ towns.</p>
 <div id="confidence-interval" class="section level4">
 <h4>Confidence Interval</h4>
 <p>The 95% confidence interval for the difference in mean walkability
-index between college towns and non-college towns is [7.668828,
-9.638017] in the U.S.. Since this confidence interval does not include
-0, we can conclude that the mean walkability index in college towns is
-significantly higher than the walkability index in non-college
-towns.</p>
+index between college towns and non-college towns is [-Inf, -1.491684]
+in the U.S.. Since the entire interval is below 0, we can conclude that
+the mean walkability index in college towns is significantly higher than
+the walkability index in non-college towns.</p>
 </div>
 </div>
 <div id="discussion" class="section level3">
@@ -558,11 +557,11 @@ walkability index for the two groups were actually the same. A very
 small p-value, as seen here, indicates that it is highly unlikely for
 the walkability index between College and Non-College towns to be equal.
 Furthermore, the 95% confidence interval for the difference in average
-walkability score is [7.668828, 9.638017`], which not only does not
-include 0 but is entirely less than 0. This is consistent with the
-one-sided hypothesis test and reinforces the conclusion that the
-walkability index in College Towns is significantly higher compared to
-the Non-College towns.</p>
+walkability score is [-Inf, -1.491684], which not only does not include
+0 but is entirely less than 0. This is consistent with the one-sided
+hypothesis test and reinforces the conclusion that the walkability index
+in College Towns is significantly higher compared to the Non-College
+towns.</p>
 <p>The combination of the small p-value and the confidence interval
 entirely less than 0 provides robust evidence of the disparity in the
 walkability index between these two town groups.</p>
@@ -575,10 +574,10 @@ college towns uses the institution size as the main metric, which
 doesn’t take into account other factors of college towns like the social
 scene, demographics, and the reliance of the local economy on the
 college.</p></li>
-<li><p><em>Large Joins:</em> We joined our data for cities and colleges
-on the city name, which brings about the issue of a large city being
-classified as a college town even if only a small portion of the city is
-a college.</p>
+<li><p><em>Large City Generalizations:</em> We joined our data for
+cities and colleges on the city name, which brings about the issue of a
+large city being classified as a college town even if only a small
+portion of the city is a college.</p>
 <ul>
 <li>Having a column “county” in our walkability and college data sets
 would have been useful as we could have joined on that rather than city.
@@ -586,7 +585,9 @@ This would’ve provided a better overall representation of a college
 town.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>Additional Questions and Recommendations for Future
+</ul>
+<p><br />
+- <strong>Additional Questions and Recommendations for Future
 Research</strong></p>
 <ul>
 <li><p><em>Alternative Definition of College Towns:</em> For future
@@ -606,8 +607,9 @@ also compare walkability patterns across different kinds of colleges,
 such as large public univerisities, small private colleges, and
 community colleges, to see whether the size or type or institution
 affects the results.</p></li>
-</ul></li>
 </ul>
+<p><br />
+</p>
 </div>
 </div>
 </div>

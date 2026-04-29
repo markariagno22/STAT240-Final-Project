@@ -96,12 +96,12 @@ t.test(walkability ~ has_college, data=clean_data, alternative = "less")
 
 - Test Statistic (t): -6.8466
 - P-value: 3.092e-10
-- Confidence Interval: [7.668828, 9.638017]
+- Confidence Interval: [-Inf, -1.491684]
 
 ```{r}
 t = -6.8466
 p_val = 3.092e-10
-CI = c(7.668828, 9.638017)
+ci = c(-Inf, -1.491684)
 ```
 
 
@@ -111,7 +111,7 @@ Since our p-value of `r p_val` is < alpha = .05 we reject the null hypothesis in
 
 #### Confidence Interval
 
-The 95% confidence interval for the difference in mean walkability index between college towns and non-college towns is [`r CI`] in the U.S.. Since this confidence interval does not include 0, we can conclude that the mean walkability index in college towns is significantly higher than the walkability index in non-college towns. 
+The 95% confidence interval for the difference in mean walkability index between college towns and non-college towns is [-Inf, -1.491684] in the U.S.. Since the entire interval is below 0, we can conclude that the mean walkability index in college towns is significantly higher than the walkability index in non-college towns. 
 
 ### Discussion
 
@@ -119,7 +119,7 @@ The 95% confidence interval for the difference in mean walkability index between
 
 The results of our analysis show that the p-value `r p_val` is far less than the significance level of 0.05. This provides strong evidence to reject the null hypothesis and conclude that the walkability index in college towns is much higher than the walkability index in non-college towns.
 
-For non-statistical readers, the p-value represents the probability of observing such a difference (or a more extreme one) if the average walkability index for the two groups were actually the same. A very small p-value, as seen here, indicates that it is highly unlikely for the walkability index between College and Non-College towns to be equal. Furthermore, the 95% confidence interval for the difference in average walkability score is [`r CI``], which not only does not include 0 but is entirely less than 0. This is consistent with the one-sided hypothesis test and reinforces the conclusion that the walkability index in College Towns is significantly higher compared to the Non-College towns.
+For non-statistical readers, the p-value represents the probability of observing such a difference (or a more extreme one) if the average walkability index for the two groups were actually the same. A very small p-value, as seen here, indicates that it is highly unlikely for the walkability index between College and Non-College towns to be equal. Furthermore, the 95% confidence interval for the difference in average walkability score is [-Inf, -1.491684], which not only does not include 0 but is entirely less than 0. This is consistent with the one-sided hypothesis test and reinforces the conclusion that the walkability index in College Towns is significantly higher compared to the Non-College towns.
 
 The combination of the small p-value and the confidence interval entirely less than 0 provides robust evidence of the disparity in the walkability index between these two town groups.
 
@@ -127,10 +127,11 @@ The combination of the small p-value and the confidence interval entirely less t
 
   + *College Town Categorization:* Our methodology for categorizing college towns is not 100% ideal. Our classification for college towns uses the institution size as the main metric, which doesn’t take into account other factors of college towns like the social scene, demographics, and the reliance of the local economy on the college.
 
-  + *Large Joins:* We joined our data for cities and colleges on the city name, which brings about the issue of a large city being classified as a college town even if only a small portion of the city is a college.
+  + *Large City Generalizations:* We joined our data for cities and colleges on the city name, which brings about the issue of a large city being classified as a college town even if only a small portion of the city is a college.
 
     + Having a column “county” in our walkability and college data sets would have been useful as we could have joined on that rather than city. This would’ve provided a better overall representation of a college town.
 
+\
 - **Additional Questions and Recommendations for Future Research**
 
   + *Alternative Definition of College Towns:* For future research we can change the way we define college towns. For example, instead of mainly using institution size, future studies could classify college towns by student population to city population ratios, number of colleges in a city, or overall influence of a college in a local area.
@@ -138,3 +139,4 @@ The combination of the small p-value and the confidence interval entirely less t
   + *Expanding the Dataset:* Another way to make this analysis more effective for future research could be to add additional variables such as access to public transportation, population density, housing development, downtown business activity, and more could help explain whether if it’s the college towns that are truly more walkable or if it’s other city characteristics that are playing a bigger role.
   + *Comparing by Institution Types:* Future studies could also compare walkability patterns across different kinds of colleges, such as large public univerisities, small private colleges, and community colleges, to see whether the size or type or institution affects the results.
 
+\
