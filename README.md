@@ -2,6 +2,8 @@
 
 A statistical analysis project looking into whether college towns in the United States have significantly better walkability than in non-college towns.
 
+The full analysis can be viewed in STAT240_Project_Final.html
+
 ## Description
 
 This project looks at the relationship between college town status and walkability.
